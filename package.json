@@ -15,7 +15,7 @@
     "quickstart": "node .",
     "test": "true",
     "dev": "ts-node-dev --respawn src/index.ts",
-    "prettier:format": "prettier --config .prettierrc src/**/*.ts --write",
+    "prettier:format": "prettier --config .prettierrc.json src/**.ts --write",
     "prepare": "husky install"
   },
   "devDependencies": {
