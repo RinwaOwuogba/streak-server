@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  streak-server:
+    build:
+      context: .
+      target: builder
+    image: streak/streak-server
+    ports:
+      - $PORT:8080
+    environment:
+      - DB_CONNECTION_STRING=$DB_CONNECTION_STRING
+    volumes:
+      - ./:/usr/src/app
+    command: yarn run dev
