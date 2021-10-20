@@ -6,6 +6,8 @@ services:
       context: .
       target: builder
     image: streak/streak-server
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     ports:
       - $PORT:8080
     environment:
