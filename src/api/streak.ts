@@ -24,6 +24,31 @@ router.post('/streaks', async (req, res, next) => {
 });
 
 /**
+ * Get list of user's streaks
+ */
+router.get('/:userId/streaks', async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    const streaks = await StreakModel.find({
+      user: userId,
+    });
+
+    if (!streaks.length) {
+      res.status(404);
+
+      throw new Error('Streak not found');
+    }
+
+    res.json({
+      streaks,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * Get details of a streak
  */
 router.get('/streaks/:streakId', async (req, res, next) => {

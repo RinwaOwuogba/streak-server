@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkJwt } from './middlewares/checkJwt';
+import checkJwt from './middlewares/checkJwt';
 import streakRouter from './streak';
 
 const router = express.Router();

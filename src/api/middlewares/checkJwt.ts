@@ -5,7 +5,7 @@ import config from '../../config';
 // Authorization middleware. When used, the
 // Access Token must exist and be verified against
 // the Auth0 JSON Web Key Set
-export const checkJwt = jwt({
+const checkJwt = jwt({
   // Dynamically provide a signing key
   // based on the kid in the header and
   // the signing keys provided by the JWKS endpoint.
@@ -17,7 +17,9 @@ export const checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: config.AUTH0.audience,
+  audience: config.auth0.audience,
   issuer: [`https://${config.auth0.domain}/`],
   algorithms: ['RS256'],
 });
+
+export default checkJwt;
