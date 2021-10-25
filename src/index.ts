@@ -1,6 +1,6 @@
+import loader from './loaders';
 import app from './api';
 import config from './config';
-import loader from './loaders';
 
 const startApp = async () => {
   await loader(app);

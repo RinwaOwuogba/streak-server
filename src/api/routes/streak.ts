@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import StreakModel from '../models/streak';
+import StreakModel from '../../models/streak';
 
 const router = Router();
 
@@ -33,12 +33,6 @@ router.get('/:userId/streaks', async (req, res, next) => {
     const streaks = await StreakModel.find({
       user: userId,
     });
-
-    if (!streaks.length) {
-      res.status(404);
-
-      throw new Error('Streak not found');
-    }
 
     res.json({
       streaks,

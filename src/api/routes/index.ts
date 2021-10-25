@@ -1,6 +1,7 @@
 import express from 'express';
-import checkJwt from './middlewares/checkJwt';
+import checkJwt from '../middlewares/checkJwt';
 import streakRouter from './streak';
+import goalRouter from './goal';
 
 const router = express.Router();
 
@@ -8,6 +9,7 @@ const router = express.Router();
 router.get('/', (req, res) => res.send('ok'));
 
 router.use(checkJwt);
+router.use(goalRouter);
 router.use(streakRouter);
 
 export default router;
