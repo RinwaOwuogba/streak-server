@@ -135,9 +135,7 @@ router.delete(
         throw new Error('Goal not found');
       }
 
-      res.json({
-        goal: deletedGoal,
-      });
+      res.status(204).send();
     } catch (error) {
       next(error);
     }

@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 import { Express } from 'express';
 import mongoose from 'mongoose';
 import config from '../config';
