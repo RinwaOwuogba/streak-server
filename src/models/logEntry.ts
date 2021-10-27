@@ -9,7 +9,13 @@ export const LogEntrySchema: Schema = new Schema(
       ref: 'Streak',
       ...requiredObjectId,
     },
-    content: requiredString,
+    goal: {
+      ref: 'Goal',
+      ...requiredObjectId,
+    },
+    content: {
+      type: String,
+    },
   },
   {
     timestamps: true,
