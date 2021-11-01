@@ -13,7 +13,7 @@ export const LogEntrySchema: Schema = new Schema(
       ref: 'Goal',
       ...requiredObjectId,
     },
-    content: {
+    description: {
       type: String,
     },
   },

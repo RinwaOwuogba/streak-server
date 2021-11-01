@@ -17,5 +17,7 @@
     "project": ["./tsconfig.json"]
   },
   "plugins": ["@typescript-eslint"],
-  "rules": {}
+  "rules": {
+    "prefer-destructuring": ["error", { "object": true, "array": false }]
+  }
 }

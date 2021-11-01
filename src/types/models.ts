@@ -23,7 +23,7 @@ export interface ILogEntry extends Document {
   user: string;
   streak: string | mongoose.Types.ObjectId | Partial<IStreak>;
   goal: string | mongoose.Types.ObjectId | Partial<IStreak>;
-  content: string;
+  description: string;
   updatedAt: Date;
   createdAt: Date;
 }
