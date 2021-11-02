@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { FilterQuery } from 'mongoose';
 import GoalModel from '../../models/goal';
+import LogEntryModel from '../../models/logEntry';
+import StreakModel from '../../models/streak';
 import checkPermission from '../middlewares/checkPermission';
 
 const router = Router();
@@ -149,16 +150,45 @@ router.delete(
     try {
       const { goalId, userId } = req.params;
 
-      const deletedGoal = await GoalModel.findOneAndDelete({
-        _id: goalId,
-        user: userId,
+      const session = await GoalModel.startSession();
+
+      await session.withTransaction(async () => {
+        const [deletedGoal] = await Promise.all([
+          GoalModel.findOneAndDelete(
+            {
+              _id: goalId,
+              user: userId,
+            },
+            {
+              session,
+            }
+          ),
+          LogEntryModel.deleteMany(
+            {
+              user: userId,
+              goal: goalId,
+            },
+            {
+              session,
+            }
+          ),
+          StreakModel.deleteMany(
+            {
+              user: userId,
+              goal: goalId,
+            },
+            {
+              session,
+            }
+          ),
+        ]);
+
+        if (!deletedGoal) {
+          res.status(404);
+
+          throw new Error('Goal not found');
+        }
       });
-
-      if (!deletedGoal) {
-        res.status(404);
-
-        throw new Error('Goal not found');
-      }
 
       res.status(204).send();
     } catch (error) {
