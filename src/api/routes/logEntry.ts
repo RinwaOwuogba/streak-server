@@ -19,24 +19,38 @@ router.post(
       const { description } = req.body;
       const { goalId, userId } = req.params;
 
-      const [previousConsecutiveEntry, existingGoal] = await Promise.all([
-        LogEntryModel.findOne({
-          user: userId,
-          goal: goalId,
-          createdAt: {
-            $gte: startOfYesterday(),
-            $lt: startOfToday(),
-          },
-        }),
-        GoalModel.findOne({
-          _id: goalId,
-        }),
-      ]);
+      const [previousConsecutiveEntry, duplicateEntry, existingGoal] =
+        await Promise.all([
+          LogEntryModel.findOne({
+            user: userId,
+            goal: goalId,
+            createdAt: {
+              $gte: startOfYesterday(),
+              $lt: startOfToday(),
+            },
+          }),
+          LogEntryModel.findOne({
+            user: userId,
+            goal: goalId,
+            createdAt: {
+              $gte: startOfToday(),
+            },
+          }),
+          GoalModel.findOne({
+            _id: goalId,
+          }),
+        ]);
 
       if (!existingGoal) {
         res.status(404);
 
         throw new Error('Goal not found');
+      }
+
+      if (duplicateEntry) {
+        res.status(400);
+
+        throw new Error('Duplicate entry');
       }
 
       const session = await LogEntryModel.startSession();
@@ -203,108 +217,5 @@ router.get(
     }
   }
 );
-
-// /**
-//  * Get list of user's streaks
-//  */
-// router.get('/:userId/streaks', async (req, res, next) => {
-//   try {
-//     const { userId } = req.params;
-
-//     const streaks = await StreakModel.find({
-//       user: userId,
-//     });
-
-//     res.json({
-//       streaks,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// /**
-//  * Get details of a streak
-//  */
-// router.get('/streaks/:streakId', async (req, res, next) => {
-//   try {
-//     const { streakId } = req.params;
-
-//     const streak = await StreakModel.findOne({
-//       _id: streakId,
-//     });
-
-//     if (!streak) {
-//       res.status(404);
-
-//       throw new Error('Streak not found');
-//     }
-
-//     res.json({
-//       streak,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// /**
-//  * Update a streak
-//  */
-// router.put('/streaks/:streakId', async (req, res, next) => {
-//   try {
-//     const { streakId } = req.params;
-//     const { name } = req.body;
-
-//     const updatedStreak = await StreakModel.findOneAndUpdate(
-//       {
-//         _id: streakId,
-//       },
-//       {
-//         name,
-//       },
-//       {
-//         new: true,
-//       }
-//     );
-
-//     if (!updatedStreak) {
-//       res.status(404);
-
-//       throw new Error('Streak not found');
-//     }
-
-//     res.json({
-//       streak: updatedStreak,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// /**
-//  * Delete a streak
-//  */
-// router.delete('/streaks/:streakId', async (req, res, next) => {
-//   try {
-//     const { streakId } = req.params;
-
-//     const deletedStreak = await StreakModel.findOneAndDelete({
-//       _id: streakId,
-//     });
-
-//     if (!deletedStreak) {
-//       res.status(404);
-
-//       throw new Error('Streak not found');
-//     }
-
-//     res.json({
-//       streak: deletedStreak,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
 
 export default router;

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { FilterQuery } from 'mongoose';
 import GoalModel from '../../models/goal';
 import checkPermission from '../middlewares/checkPermission';
 
@@ -32,6 +33,30 @@ router.post('/users/:userId/goals', checkPermission, async (req, res, next) => {
 router.get('/users/:userId/goals', checkPermission, async (req, res, next) => {
   try {
     const { userId } = req.params;
+    const { ongoingStreak } = req.query;
+
+    if (ongoingStreak) {
+      const goals = await GoalModel.find(
+        {
+          user: userId,
+          ongoingStreak: {
+            $gte: 1,
+          },
+        },
+        null,
+        {
+          sort: {
+            ongoingStreak: -1,
+          },
+        }
+      );
+
+      res.json({
+        goals,
+      });
+
+      return;
+    }
 
     const goals = await GoalModel.find({
       user: userId,
