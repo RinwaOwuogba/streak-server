@@ -31,7 +31,7 @@ jobs:
       - name: Push Docker image
         run: docker push $IMAGE_NAME
 
-        - name: Deploy Docker image
+      - name: Deploy Docker image
         uses: google-github-actions/deploy-cloudrun@v0.4.0
         with:
           service: ${{ env.SERVICE }}
@@ -40,4 +40,3 @@ jobs:
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
-
