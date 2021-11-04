@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}
+      REGION: europe-west3
+      SERVICE: ${{ secrets.GCP_PROJECT_ID }}-streak-server
     steps:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
@@ -29,5 +31,13 @@ jobs:
       - name: Push Docker image
         run: docker push $IMAGE_NAME
 
-      - name: Deploy Docker image
-        run: gcloud run deploy ${{ secrets.GCP_PROJECT_ID }}-streak-server --image $IMAGE_NAME --region europe-west3 --platform managed
+        - name: Deploy Docker image
+        uses: google-github-actions/deploy-cloudrun@v0.4.0
+        with:
+          service: ${{ env.SERVICE }}
+          image: ${{ env.IMAGE_NAME }}
+          region: ${{ env.REGION }}
+
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
+
