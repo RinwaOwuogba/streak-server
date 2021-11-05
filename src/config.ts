@@ -12,6 +12,7 @@ const config = {
     domain: process.env.AUTH0_DOMAIN,
   },
   isProduction: process.env.NODE_ENV === 'production',
+  clientOriginUrl: process.env.CLIENT_ORIGIN_URL,
 };
 
 export default config;
