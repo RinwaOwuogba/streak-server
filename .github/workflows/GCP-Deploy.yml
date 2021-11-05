@@ -26,11 +26,11 @@ jobs:
       - name: Configure Docker
         run: gcloud auth configure-docker --quiet
 
-      - name: Build Docker image
-        run: docker build . -t $IMAGE_NAME
+      # - name: Build Docker image
+      #   run: docker build . -t $IMAGE_NAME
 
-      - name: Push Docker image
-        run: docker push $IMAGE_NAME
+      # - name: Push Docker image
+      #   run: docker push $IMAGE_NAME
 
       - name: Deploy Docker image
         uses: google-github-actions/deploy-cloudrun@v0.6.0
