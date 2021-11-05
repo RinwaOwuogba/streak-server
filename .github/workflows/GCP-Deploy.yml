@@ -38,6 +38,10 @@ jobs:
           service: ${{ env.SERVICE }}
           image: ${{ env.IMAGE_NAME }}
           region: ${{ env.REGION }}
+          env_vars: "DB_CONNECTION_STRING={{ secrets.DB_CONNECTION_STRING }},\
+            CLIENT_ORIGIN_URL={{ secrets.CLIENT_ORIGIN_URL }},\
+            AUTH0_AUDIENCE={{ secrets.AUTH0_AUDIENCE }},\
+            AUTH0_DOMAIN={{ secrets.AUTH0_DOMAIN }}"
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
